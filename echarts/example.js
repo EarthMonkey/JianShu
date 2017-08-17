@@ -13,9 +13,16 @@ window.onload = function () {
     var data3 = getLineData(3);
     var data4 = getScatterData();
 
+    /**
+     * 此处若觉得可读性较差，可以分开写，如
+     * option = {
+     *    series: []
+     * };
+     * option.series.push(xxx);
+     * */
     var option = {
         title: {
-            text: '图标大杂烩 @copyright howSure'
+            text: '图表大杂烩 @copyright howSure'
         },
         tooltip: {
             trigger: 'axis',
@@ -122,7 +129,7 @@ window.onload = function () {
                 type: 'line',
                 data: data1.data,
                 smooth: true,  // 拐点圆滑（false-尖角）
-                markLine: {
+                markLine: {  // 水位线
                     data: [{
                         type: "average"
                     }]
@@ -172,7 +179,7 @@ window.onload = function () {
                 type: 'custom',  // 自定义图形，此处type为custom
                 xAxisIndex: 2,
                 yAxisIndex: 2,
-                renderItem: renderItem,
+                renderItem: renderItem,  // 渲染函数
                 data: data4,
                 animationDelay: function (idx) {
                     return idx * 5;
@@ -190,7 +197,7 @@ window.onload = function () {
                 colorAlpha: 0.2  // 颜色透明度
             }, {
                 gt: data1.avg,
-                lte: 10000,
+                lte: 10000,  // 不知道为什么这里不设置一个上限就会出错
                 color: 'red'
             }]
         }, {
@@ -242,24 +249,24 @@ function renderItem(params, api) {
         return;
     }
 
-    var xPos = api.value(1);
+    var xPos = api.value(1);  // 此处为xAxis数据的数组下标
     var yPos = api.value(0);
 
     var point = api.coord([yPos, xPos]); // 定位
-    var itemSize = val * 10;
+    var itemSize = val * 10;  // 此处指定图形的大小，不同值不同大小
 
     return {
-        type: 'path',
+        type: 'path',  // 此处设置svg路径类型
         shape: {
-            pathData: svgPath[xPos],
+            pathData: svgPath[xPos], // 图形的svg路径
             width: itemSize,
             height: itemSize,
             x: -itemSize / 2,
             y: -itemSize / 2
         },
-        position: point,
+        position: point,  // 将图形放到本该在的位置
         style: api.style({
-            fill: colors[xPos]
+            fill: colors[xPos]  // 图形颜色
         })
     }
 }
